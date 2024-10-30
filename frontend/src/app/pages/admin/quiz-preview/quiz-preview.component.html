@@ -1,0 +1,30 @@
+<div *ngIf="isQuizLoaded" class="p-6 bg-gray-50 min-h-screen">
+  <!-- Quiz Header -->
+  <div class="mb-6 text-end">
+    <h3 class="text-xl font-medium text-gray-800">{{ quiz.name }}</h3>
+    <button (click)="quit()" class="px-6 py-2 bg-red-500 text-white font-semibold rounded-lg shadow hover:bg-red-600">
+      Quit
+    </button>
+  </div>
+
+  <!-- Quiz Questions -->
+  <div class="space-y-6">
+    <div *ngFor="let question of quiz.questions" class="bg-white p-4 rounded-lg shadow-md">
+      <!-- Question Number and Text -->
+      <div class="mb-4">
+        <strong class="text-lg text-gray-700">{{ question.qno }}. {{ question.question }}</strong>
+      </div>
+
+      <!-- Options List -->
+      <ul class="space-y-2">
+        <li *ngFor="let option of question.options" class="flex items-center space-x-2">
+          <input type="radio"
+                 name="{{ question.qno }}"
+                 [value]="option"
+                 class="form-radio h-4 w-4 text-blue-500">
+          <label class="text-gray-600">{{ option }}</label>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

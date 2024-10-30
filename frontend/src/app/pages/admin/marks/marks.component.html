@@ -1,0 +1,32 @@
+<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+  <h1 class="text-3xl font-bold mb-6 text-center text-blue-600">Marks Details</h1>
+  <!-- Download Buttons -->
+  <div class="flex justify-center mb-4">
+    <button (click)="downloadPDF()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Download PDF</button>
+    <button (click)="downloadExcel()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Download Excel</button>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="min-w-full border-collapse border border-gray-300 rounded-lg">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="border border-gray-300 p-3 text-left font-medium text-gray-700">Name</th>
+          <th class="border border-gray-300 p-3 text-left font-medium text-gray-700">Reg No</th>
+          <th class="border border-gray-300 p-3 text-left font-medium text-gray-700">Roll No</th>
+          <th class="border border-gray-300 p-3 text-left font-medium text-gray-700">Department</th>
+          <th class="border border-gray-300 p-3 text-left font-medium text-gray-700">Year</th>
+          <th class="border border-gray-300 p-3 text-left font-medium text-gray-700">Marks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let detail of marksDetails" class="hover:bg-gray-100">
+          <td class="border border-gray-300 p-3">{{ detail.name }}</td>
+          <td class="border border-gray-300 p-3">{{ detail.regno }}</td>
+          <td class="border border-gray-300 p-3">{{ detail.rollno }}</td>
+          <td class="border border-gray-300 p-3">{{ detail.department }}</td>
+          <td class="border border-gray-300 p-3">{{ detail.year }}</td>
+          <td class="border border-gray-300 p-3">{{ detail.marks }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

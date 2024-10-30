@@ -1,0 +1,18 @@
+<div class="lg:w-3/12 mt-28 mb-10 px-10 py-10 border-2 rounded-3xl shadow-xl mx-auto">
+  <h3 class="text-3xl text-center font-semibold py-5">Login</h3>
+  <form [formGroup]="loginForm" class="flex flex-col">
+    <div class="flex flex-col mt-4 mb-1">
+      <input formControlName="staffId" type="text" class="p-2 border border-gray-300 outline-blue-500 rounded" placeholder="Staff ID">
+      <span *ngIf="loginForm.hasError('required', 'staffId') && loginForm.controls['staffId'].dirty" class="text-red-500">*Staff ID required</span>
+    </div>
+    <div class="flex flex-col mt-4 mb-1">
+      <input formControlName="password" type="password" class="p-2 border border-gray-300 outline-blue-500 rounded" placeholder="Password">
+      <span *ngIf="loginForm.hasError('required', 'password') && loginForm.controls['password'].dirty" class="text-red-500">*Password required</span>
+    </div>
+    <button [disabled]="loginForm.invalid" [class.disabled]="loginForm.invalid" (click)="login()" class="bg-indigo-600 p-2 rounded mt-3 text-white">Login</button>
+  </form>
+  <div class="flex justify-between mt-5">
+    <a routerLink="/sendmail" class="text-indigo-500 ml-2 cursor-pointer">Forget Password</a>
+    <a routerLink="/adregis" class="text-indigo-500 ml-2 cursor-pointer">Create Account</a>
+  </div>
+</div>

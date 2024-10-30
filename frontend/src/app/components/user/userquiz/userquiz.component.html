@@ -1,0 +1,13 @@
+<div class="container mx-auto p-4 ">
+  <div class="bg-white shadow-md rounded p-4">
+    <h2 class="text-lg font-semibold">Available Quizzes</h2>
+    <ul>
+      <li *ngFor="let quiz of quizzes" class="mb-2 flex justify-between">
+        <span>{{ quiz.name }}</span>
+        <button [disabled]="!quiz.active" class="bg-blue-500 text-white px-4 py-2 rounded ml-4 hover:bg-blue-300" (click)="startQuiz(quiz._id)">
+          Start Quiz
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>

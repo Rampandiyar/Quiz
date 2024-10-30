@@ -1,0 +1,75 @@
+<div *ngIf="isQuizLoaded" class="flex p-6 bg-gray-50 min-h-screen">
+  <!-- Left: Main Quiz Content -->
+  <div class="flex-1 space-y-6">
+    <!-- Quiz Header -->
+    <div class="mb-6 text-end">
+      <div class="text-xl font-semibold text-gray-700 flex gap-3 items-center justify-end">
+        Quiz Duration: <span class="text-blue-500">{{ timer.hours }}h {{ timer.minutes }}m {{ timer.seconds }}s</span>
+        <button (click)="quit()" class="px-6 py-2 bg-red-500 text-white font-semibold rounded-lg shadow hover:bg-red-600">
+          Quit
+        </button>
+      </div>
+      <h3 class="text-xl font-medium text-gray-800 mt-2">{{ quiz.name }}</h3>
+    </div>
+
+    <!-- Current Question -->
+    <div class="bg-white p-4 rounded-lg shadow-md">
+      <div class="mb-4">
+        <strong class="text-lg text-gray-700">{{ quiz.questions[currentQuestionIndex].qno }}. {{ quiz.questions[currentQuestionIndex].question }}</strong>
+      </div>
+
+      <!-- Options List -->
+      <ul class="space-y-2">
+        <li *ngFor="let option of quiz.questions[currentQuestionIndex].options" class="flex items-center space-x-2">
+          <input type="radio"
+                 [name]="'question-' + quiz.questions[currentQuestionIndex].qno"
+                 [value]="option"
+                 [checked]="selectedAnswers[currentQuestionIndex] === option"
+                 (change)="onOptionChange(option)"
+                 class="form-radio h-4 w-4 text-blue-500">
+          <label class="text-gray-600">{{ option }}</label>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="flex justify-between mt-4">
+      <button *ngIf="currentQuestionIndex > 0"
+              (click)="goToPreviousQuestion()"
+              class="px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg shadow hover:bg-gray-600">
+        Previous
+      </button>
+
+      <button *ngIf="currentQuestionIndex < quiz.questions.length - 1"
+              (click)="goToNextQuestion()"
+              class="ml-auto px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600">
+        Next
+      </button>
+
+      <!-- Submit Button for Last Question -->
+      <button *ngIf="currentQuestionIndex === quiz.questions.length - 1"
+              (click)="submitQuiz()"
+              class="ml-auto px-6 py-2 bg-green-500 text-white font-semibold rounded-lg shadow hover:bg-green-600">
+        Submit Quiz
+      </button>
+    </div>
+  </div>
+
+  <!-- Right: Question Navigation Sidebar -->
+  <div class="w-1/4 ml-8">
+    <div class="p-4 bg-white rounded-lg shadow-md">
+      <h4 class="text-lg font-semibold mb-4 text-gray-700">Questions</h4>
+      <div class="grid grid-cols-5 gap-2">
+        <button *ngFor="let question of quiz.questions; let i = index"
+                [ngClass]="{
+                  'bg-green-500 text-white': answeredQuestions[i],
+                  'bg-blue-500 text-white': !answeredQuestions[i]
+                }"
+                (click)="goToQuestion(i)"
+                class="p-2 rounded-lg text-center">
+          {{ i + 1 }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
