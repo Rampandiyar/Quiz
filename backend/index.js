@@ -7,7 +7,6 @@ import adminRoute from "./routes/admin.js"; // Updated reference
 import quizRoute from "./routes/quiz.js"; // Updated reference"
 import userRoute from "./routes/aduser.js"; // Updated
 
-
 import dotenv from 'dotenv';
 
 dotenv.config(); // Move dotenv config up to ensure it's loaded before anything else
@@ -40,7 +39,7 @@ app.use((err, req, res, next) => {
 });
 const connectMongoose = async (retries = 5, delay = 5000) => {
     try {
-        await mongoose.connect(process.env.MONGO_CONNECT);
+        await mongoose.connect('mongodb+srv://rampandiyar2:20kuMIehe3LtDIzs@quiz.e14kc.mongodb.net/test?retryWrites=true&w=majority');
         console.log('MongoDB Connected...');
     } catch (error) {
         console.error('Error connecting to MongoDB:', error.message);
