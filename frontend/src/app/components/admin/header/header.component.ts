@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // Check if admin_id exists in local storage
     const adminId = localStorage.getItem('admin_id');
     if (!adminId) {
-      this.router.navigate(['adlogin']);
+      this.router.navigate(['']);
       return;
     }
 
@@ -81,7 +81,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         localStorage.removeItem('admin_id');
         localStorage.clear();
         this.adminService.isLoggedIn$.next(false);
-        this.router.navigate(['adlogin']);
+        this.router.navigate(['']);
       },
       (error) => {
         console.error('Logout failed', error);

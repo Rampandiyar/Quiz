@@ -5,7 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 export const routes: Routes = [
   {path:'adregis',loadComponent:()=> import('./pages/admin/adregis/adregis.component')},
   {path:'preview/:id',loadComponent:()=> import('./pages/admin/quiz-preview/quiz-preview.component')},
-  {path:'/',loadComponent:()=> import('./pages/admin/adlogin/adlogin.component')},
+  {path:'',loadComponent:()=> import('./pages/admin/adlogin/adlogin.component')},
   {path:'home',loadComponent:()=> import('./pages/admin/addash/addash.component')},
   {path:'sendmail',loadComponent:()=> import('./pages/sendmail/sendmail.component')},
   {path:'adforgetpass',loadComponent:()=> import('./pages/forgetpassword/forgetpassword.component')},

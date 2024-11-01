@@ -43,7 +43,7 @@ export default class AdregisComponent implements OnInit {
       next: (res)=>{
         alert("Admin Created");
         this.adminregisForm.reset();
-        this.router.navigate(['adlogin']);
+        this.router.navigate(['']);
       },
       error: (err)=>{
         console.log(err);
