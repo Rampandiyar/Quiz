@@ -22,12 +22,10 @@ app.use(express.json());
 app.use(cookieparser());
 
 // Create a temporary directory for file uploads
-const tmpDir = tmp.dirSync({ unsafeCleanup: true }).name;
-
-// Configure multer to use the temporary directory
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, tmpDir); // Use the temporary directory for uploads
+        // Use the system's temporary directory
+        cb(null, os.tmpdir());
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname); // Store the file with its original name
@@ -35,6 +33,11 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+
+// Example route for file upload
+app.post('/upload', upload.single('file'), (req, res) => {
+    res.json({ message: 'File uploaded successfully!', file: req.file });
+});
 
 // Define routes after middleware
 app.use('/quiz/role', roleRoute);
