@@ -1,31 +1,38 @@
 <div class="lg:w-3/12 mb-10 px-10 pb-5 shadow-xl mx-auto">
-  <h3 class="text-3xl text-center font-semibold py-5 ">Register</h3>
+  <h3 class="text-3xl text-center font-semibold py-5">Register</h3>
   <form [formGroup]="adminregisForm" class="flex flex-col">
     <div class="flex flex-col mt-4 mb-1">
       <input formControlName="name" type="text" class="p-2 border border-gray-300 outline-blue-500 rounded" placeholder="Name">
       <span *ngIf="adminregisForm.hasError('required', 'name') && adminregisForm.controls['name'].dirty" class="text-red-500">*Name required</span>
     </div>
+
     <div class="flex flex-col mt-4 mb-1">
       <input formControlName="staffId" type="text" class="p-2 border border-gray-300 outline-blue-500 rounded" placeholder="staffId">
       <span *ngIf="adminregisForm.hasError('required', 'staffId') && adminregisForm.controls['staffId'].dirty" class="text-red-500">*staffId required</span>
     </div>
+
     <div class="flex flex-col mt-4 mb-1">
       <input formControlName="email" type="email" class="p-2 border border-gray-300 outline-blue-500 rounded" placeholder="Email">
       <span *ngIf="adminregisForm.hasError('required', 'email') && adminregisForm.controls['email'].dirty" class="text-red-500">*Email required</span>
       <span *ngIf="adminregisForm.hasError('email', 'email') && adminregisForm.controls['email'].dirty" class="text-red-500">*Invalid Email</span>
     </div>
+
     <div class="flex flex-col mt-4 mb-1">
       <input formControlName="password" type="password" class="p-2 border border-gray-300 outline-blue-500 rounded" placeholder="Password">
       <span *ngIf="adminregisForm.hasError('required', 'password') && adminregisForm.controls['password'].dirty" class="text-red-500">*Password required</span>
     </div>
+
     <div class="flex flex-col mt-4 mb-1">
       <input formControlName="confirmpassword" type="password" class="p-2 border border-gray-300 outline-blue-500 rounded" placeholder="Confirm password">
       <span *ngIf="adminregisForm.hasError('required', 'confirmpassword') && adminregisForm.controls['confirmpassword'].dirty" class="text-red-500">*Confirm password required</span>
       <span *ngIf="adminregisForm.hasError('confirmPasswordValidator', 'confirmpassword')" class="text-red-500">*Confirm Password didn't Match</span>
     </div>
-    <button  (click)="register()" class="bg-indigo-600 p-2 rounded mt-3 text-white" >Register</button>
+
+    <button type="submit" (click)="register()" class="bg-indigo-600 p-2 rounded mt-3 text-white">Register</button>
   </form>
+
   <div class="flex justify-center mt-5">
-    <span>Already Have Account</span><a routerLink="" class="text-indigo-500 ml-2 cursor-pointer">Login Here</a>
+    <span>Already Have Account</span>
+    <a routerLink="" class="text-indigo-500 ml-2 cursor-pointer">Login Here</a>
   </div>
 </div>

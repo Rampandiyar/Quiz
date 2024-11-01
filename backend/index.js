@@ -38,14 +38,14 @@ app.use((err, req, res, next) => {
         data: err.data || null,
     });
 });
-
-const connectMongoose = async () => {
+const connectMongoose = async (retries = 5, delay = 5000) => {
     try {
         await mongoose.connect(process.env.MONGO_CONNECT);
         console.log('MongoDB Connected...');
     } catch (error) {
         console.error('Error connecting to MongoDB:', error.message);
-        process.exit(1);
+        if (retries === 0) process.exit(1);
+        setTimeout(() => connectMongoose(retries - 1, delay), delay);
     }
 }
 
