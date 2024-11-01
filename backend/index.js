@@ -2,12 +2,11 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cookieparser from 'cookie-parser';
 import cors from 'cors';
-import multer from 'multer';
-import tmp from 'tmp';
 import roleRoute from "./routes/roles.js";
 import adminRoute from "./routes/admin.js"; // Updated reference
-import quizRoute from "./routes/quiz.js"; // Updated reference
+import quizRoute from "./routes/quiz.js"; // Updated reference"
 import userRoute from "./routes/aduser.js"; // Updated
+
 
 import dotenv from 'dotenv';
 
@@ -21,34 +20,13 @@ app.use(cors({ origin: 'http://localhost:4200', credentials: true }));
 app.use(express.json());
 app.use(cookieparser());
 
-// Create a temporary directory for file uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        // Use the system's temporary directory
-        cb(null, os.tmpdir());
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname); // Store the file with its original name
-    }
-});
-
-const upload = multer({ storage: storage });
-
-// Example route for file upload
-app.post('/upload', upload.single('file'), (req, res) => {
-    res.json({ message: 'File uploaded successfully!', file: req.file });
-});
-
 // Define routes after middleware
 app.use('/quiz/role', roleRoute);
 app.use('/quiz/admin', adminRoute);
 app.use('/quiz/quizs', quizRoute); // Updated reference
-app.use('/quiz/user', userRoute); // Updated reference
+app.use('/quiz/user',userRoute)
+// Updated reference
 
-// Example route for file upload
-app.post('/upload', upload.single('file'), (req, res) => {
-    res.json({ message: 'File uploaded successfully!', file: req.file });
-});
 
 app.use((err, req, res, next) => {
     const statusCode = err.status || 500;
@@ -61,19 +39,15 @@ app.use((err, req, res, next) => {
     });
 });
 
-const connectMongoose = async (retries = 5, delay = 5000) => {
+const connectMongoose = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_CONNECT, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(process.env.MONGO_CONNECT);
         console.log('MongoDB Connected...');
     } catch (error) {
         console.error('Error connecting to MongoDB:', error.message);
-        if (retries === 0) process.exit(1);
-        setTimeout(() => connectMongoose(retries - 1, delay), delay);
+        process.exit(1);
     }
-};
+}
 
 app.listen(5000, () => {
     connectMongoose();
