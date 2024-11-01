@@ -23,6 +23,7 @@
     "nodemailer": "^6.9.15",
     "nodemon": "^3.1.4",
     "simple-excel-to-json": "^2.3.0",
+    "tmp": "^0.2.3",
     "xlsx": "^0.18.5"
   }
 }
