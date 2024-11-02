@@ -90,6 +90,8 @@ export class UserheadComponent implements OnInit, OnDestroy {
         this.adminService.isLoggedIn$.next(false);
         this.clearNavigationHistory(); // Clear navigation history on logout
         this.router.navigate(['/uslogin']); // Redirect to login page
+        localStorage.removeItem('user_details'); //
+        localStorage.removeItem('quiz-timer'); // Clear user details from local storage
       },
       (error) => {
         console.error('Logout failed', error);

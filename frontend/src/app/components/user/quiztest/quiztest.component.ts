@@ -122,7 +122,7 @@ export default class QuiztestComponent implements OnInit, OnDestroy {
     this.interval = setInterval(() => {
       if (this.timer.hours === 0 && this.timer.minutes === 0 && this.timer.seconds === 0) {
         clearInterval(this.interval);
-        this.submitQuiz();
+        this.submitQuiz();  // Timer ends, submit quiz
       } else {
         this.decrementTimer();
         this.saveTimerState();
@@ -223,7 +223,8 @@ export default class QuiztestComponent implements OnInit, OnDestroy {
 
     this.quizService.submitQuizResults(quizData.quizId, quizData).subscribe({
       next: (response) => {
-        this.router.navigate(['/userdash']);
+        localStorage.setItem('quizEnded', 'true');  // Flag that the quiz has ended
+        this.quit();
       },
       error: (err) => {
         console.error("Error submitting quiz:", err);

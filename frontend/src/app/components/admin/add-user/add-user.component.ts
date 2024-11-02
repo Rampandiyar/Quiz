@@ -4,6 +4,13 @@ import { AdminService } from '../../../service/admin.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+interface User {
+  _id: string;
+  name: string;
+  department: string;
+  year: string;
+}
+
 @Component({
   selector: 'app-add-user',
   standalone: true,
@@ -13,15 +20,15 @@ import { FormsModule } from '@angular/forms';
 })
 export class AddUserComponent implements OnInit {
   selectedFile: File | null = null;
-  users: any[] = [];
+  users: User[] = [];
   showAlert = false;
   alertMessage = '';
-  alertType: 'success' | 'error' = 'success'; // Type for alert
+  alertType: 'success' | 'error' = 'success';
   showDeleteConfirmation = false;
-  selectedUserId: string | null = null; // Store selected user ID for deletion
+  selectedUserId: string | null = null;
   showEditModal = false;
-  editUserName: string = ''; // For editing user name
-  currentUserId: string = ''; // For identifying which user is being edited
+  editUserName: string = '';
+  currentUserId: string = '';
 
   constructor(private adminService: AdminService, private router: Router) {}
 
@@ -48,7 +55,7 @@ export class AddUserComponent implements OnInit {
     this.adminService.addUserServicefile(formData).subscribe({
       next: () => {
         this.showAlertMessage('File uploaded successfully', 'success');
-        this.loadUsers();
+        location.reload(); // Reload the page
       },
       error: (err) => this.showAlertMessage('Error uploading file: ' + err.message, 'error'),
     });
@@ -59,8 +66,8 @@ export class AddUserComponent implements OnInit {
       next: (response) => {
         this.users = response.users.map((user: any) => ({
           ...user,
-          department: 'Computer Science and Business Systems', // Set department name
-          year: '3', // Set year
+          department: 'Computer Science and Business Systems',
+          year: '3',
         }));
       },
       error: (err) => console.error('Error loading users:', err),
@@ -69,8 +76,8 @@ export class AddUserComponent implements OnInit {
 
   editUser(id: string, name: string): void {
     this.currentUserId = id;
-    this.editUserName = name; // Set the current user name
-    this.showEditModal = true; // Show edit modal
+    this.editUserName = name;
+    this.showEditModal = true;
   }
 
   confirmEditUser(): void {
@@ -78,8 +85,7 @@ export class AddUserComponent implements OnInit {
       this.adminService.updateUserfile(this.currentUserId, { name: this.editUserName }).subscribe({
         next: () => {
           this.showAlertMessage('User updated successfully', 'success');
-          this.loadUsers(); // Reload user list
-          this.closeEditModal(); // Close edit modal
+          location.reload(); // Reload the page
         },
         error: (err) => this.showAlertMessage('Error updating user: ' + err.message, 'error'),
       });
@@ -95,8 +101,7 @@ export class AddUserComponent implements OnInit {
     this.adminService.deleteUserfile(id).subscribe({
       next: () => {
         this.showAlertMessage('User deleted successfully', 'success');
-        this.loadUsers(); // Reload user list
-        this.closeDeleteConfirmation(); // Close delete confirmation
+        location.reload(); // Reload the page
       },
       error: (err) => this.showAlertMessage('Error deleting user: ' + err.message, 'error'),
     });
@@ -118,9 +123,14 @@ export class AddUserComponent implements OnInit {
     this.alertMessage = message;
     this.alertType = type;
     this.showAlert = true;
+
+    // Auto-hide the alert after 3 seconds
+    setTimeout(() => {
+      this.closeAlert();
+    }, 3000);
   }
 
-  page(){
+  page() {
     this.router.navigate(['users']);
   }
 }

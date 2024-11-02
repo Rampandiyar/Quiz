@@ -63,20 +63,31 @@ export const updateQuiz = async (req, res, next) => {
 };
 
 // Delete a quiz
+// Delete a quiz
+// Delete a quiz
 export const deleteQuiz = async (req, res, next) => {
   try {
     const { id } = req.params;
 
+    // Find and delete the quiz
     const quiz = await AddQuiz.findByIdAndDelete(id);
     if (!quiz) {
       return res.status(404).json({ message: "Quiz not found" });
     }
 
-    return res.status(200).json({ message: "Quiz deleted successfully" });
+    // Delete associated marks
+    await Marks.deleteMany({ quizId: id }); // Adjust this if the field name differs in the Marks model
+
+    // Here you may need to reset the timer in whatever way you have implemented it
+    // For example, if timers are stored in a separate model or in-memory, handle that accordingly
+
+    return res.status(200).json({ message: "Quiz and associated marks deleted successfully" });
   } catch (error) {
     return res.status(500).json({ message: "Error deleting quiz", error });
   }
 };
+
+
 
 // Get quiz questions without the correct answers
 export const getQuizQuestions = async (req, res, next) => {

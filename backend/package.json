@@ -24,6 +24,7 @@
     "nodemon": "^3.1.4",
     "simple-excel-to-json": "^2.3.0",
     "tmp": "^0.2.3",
+    "vercel": "^37.14.0",
     "xlsx": "^0.18.5"
   }
 }

@@ -1,7 +1,11 @@
 import mongoose from "mongoose";
 
 const MarksSchema = new mongoose.Schema({
-  quizId: { type: String, required: true },
+  quizId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'AddQuiz', // Adjust this according to your model name
+    required: true,
+  },
   details: [{
     name: {
       type: String,

@@ -77,6 +77,7 @@ export class AddQuizComponent implements OnInit {
     this.adminService.deleteQuiz(id).subscribe({
       next: () => {
         this.handleDeleteSuccess(); // Handle successful deletion
+        location.reload(); // Reload page after deletion
       },
       error: (err) => {
         console.error('Error deleting quiz:', err);
@@ -88,7 +89,6 @@ export class AddQuizComponent implements OnInit {
 
   // Handle successful deletion
   private handleDeleteSuccess(): void {
-    this.getQuizzes(); // Refresh the quiz list
     this.showAlertMessage('Quiz deleted successfully!', 'success');
     this.closeDeleteConfirmation();
   }
@@ -109,7 +109,7 @@ export class AddQuizComponent implements OnInit {
     this.adminService.addQuizService(formData).subscribe(
       (response) => {
         this.showAlertMessage('Quiz added successfully!', 'success');
-        this.getQuizzes(); // Refresh the quizzes list after adding
+        location.reload(); // Reload page after adding quiz
       },
       (error) => {
         console.error('Error adding quiz:', error);
@@ -138,6 +138,7 @@ export class AddQuizComponent implements OnInit {
   closeTimerPopup(): void {
     this.showTimerPopup = false;
     this.quizDuration = null;
+    location.reload();
   }
 
   setQuizDuration(): void {
@@ -194,7 +195,7 @@ export class AddQuizComponent implements OnInit {
     }
   }
 
-  marks(){
+  marks() {
     this.router.navigate(['/marks']);
   }
 }

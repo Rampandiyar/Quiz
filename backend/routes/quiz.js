@@ -35,4 +35,6 @@ router.post('/quizes/:quizId/submit', submitQuizResults);
 router.post('/quizes/:quizId/set-duration', setQuizDuration);
 
 router.get('/quizes/all', getAllMarks);
+router.delete('/quizes/:id', deleteQuiz);
+
 export default router;
