@@ -8,6 +8,7 @@ interface User {
   regno: number;
   rollno: string;
   department: string;
+  password: string; // Added password field to the User interface
   year: number;
   email: string;
   number: string;
@@ -38,6 +39,7 @@ export default class UserpageComponent implements OnInit {
           regno: user.regno || 0,
           rollno: user.rollno || 'N/A',
           department: user.department || 'N/A',
+          password: user.password || 'N/A',
           year: user.year || 1,
           email: user.email || 'N/A',
           number: user.number || 'N/A',

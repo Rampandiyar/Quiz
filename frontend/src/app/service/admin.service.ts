@@ -94,16 +94,6 @@ export class AdminService {
     return this.http.get<any>(`${apiUrls.UserServiceApi}users`);
   }
 
-  // Update User by ID
-  updateUserfile(id: string, userData: any): Observable<any> {
-    return this.http.put<any>(`${apiUrls.UserServiceApi}users/${id}`, userData);
-  }
-
-  // Delete User by ID
-  deleteUserfile(id: string): Observable<any> {
-    return this.http.delete<any>(`${apiUrls.UserServiceApi}users/${id}`);
-  }
-
   // User Login
   userLoginService(loginObj: any): Observable<any> {
     return this.http.post<any>(`${apiUrls.UserServiceApi}ur-login`, loginObj);
@@ -114,10 +104,6 @@ export class AdminService {
     return this.http.get<any>(`${apiUrls.UserServiceApi}ur-get/${userId}`);
   }
 
-  getUserdetails(): Observable<any> {
-    return this.http.get<any>(`${apiUrls.UserServiceApi}usersdetails`); // Ensure correct endpoint
-  }
-
   submitQuizResults(quizId: string, quizData: any) {
     return this.http.post(`${apiUrls.QuizServiceApi}quizes/${quizId}/submit`, quizData);
 }
@@ -125,4 +111,55 @@ export class AdminService {
 getMarksDetails(): Observable<any> {
   return this.http.get(`${apiUrls.QuizServiceApi}quizes/all`);
 }
+
+updateUserfile(id: string, userData: { name: string }) {
+  return this.http.put(`http://localhost:5000/quiz/user/users/${id}`, userData);
+}
+
+// Delete User by ID
+deleteUserfile(id: string): Observable<any> {
+  return this.http.delete<any>(`${apiUrls.UserServiceApi}users/${id}`);
+}
+
+addQuestion(quizId: string, questionData: any): Observable<any> {
+  return this.http.post<any>(`${apiUrls.QuizServiceApi}quizzes/${quizId}/questions`, questionData);
+}
+// Admin Service Method to Edit Question
+editQuestion(quizId: string, questionId: string, questionData: any): Observable<any> {
+  return this.http.put<any>(`${apiUrls.QuizServiceApi}quizzes/${quizId}/questions/${questionId}`, questionData);
+}
+
+// Admin Service Method to Delete Question
+deleteQuestion(quizId: string, questionId: string): Observable<any> {
+  return this.http.delete<any>(`${apiUrls.QuizServiceApi}quizzes/${quizId}/questions/${questionId}`);
+}// admin.service.ts
+
+  getUserdetails(): Observable<any> {
+    return this.http.get<any>(`${apiUrls.UserServiceApi}usersdetails`);
+  }
+  // Add a new user detail to the user's 'details' array// Add a new user detail to the user's 'details' array
+addUserDetail(userId: string, userDetail: any): Observable<any> {
+  return this.http.post<any>(`${apiUrls.UserServiceApi}/add`, {
+    userId,
+    ...userDetail,
+  });
+}
+
+// Edit an existing user detail in the 'details' array
+editUserDetail(userId: string, userDetailId: string, updatedDetails: any): Observable<any> {
+  return this.http.put<any>(`${apiUrls.UserServiceApi}/edit`, {
+    userId,
+    userDetailId,
+    updatedDetails,
+  });
+}
+
+// Delete a user detail from the 'details' array
+deleteUserDetail(userId: string, userDetailId: string): Observable<any> {
+  return this.http.delete<any>(`${apiUrls.UserServiceApi}/delete`, {
+    body: { userId, userDetailId },
+  });
+}
+
+
 }

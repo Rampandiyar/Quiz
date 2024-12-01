@@ -64,11 +64,7 @@ export class AddUserComponent implements OnInit {
   loadUsers(): void {
     this.adminService.getUsersfile().subscribe({
       next: (response) => {
-        this.users = response.users.map((user: any) => ({
-          ...user,
-          department: 'Computer Science and Business Systems',
-          year: '3',
-        }));
+        this.users = response.users; // Directly use users from response
       },
       error: (err) => console.error('Error loading users:', err),
     });

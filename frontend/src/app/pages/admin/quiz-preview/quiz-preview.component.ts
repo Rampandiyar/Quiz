@@ -1,19 +1,22 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AdminService } from '../../../service/admin.service';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone:true,
+  imports: [RouterModule,FormsModule,CommonModule],
   selector: 'app-quiz-preview',
-  standalone: true,
-  imports: [CommonModule],
   templateUrl: './quiz-preview.component.html',
-  styleUrls: ['./quiz-preview.component.css']
+  styleUrls: ['./quiz-preview.component.css'],
 })
-export default class QuizPreviewComponent implements OnInit, OnDestroy {
+export default class QuizPreviewComponent implements OnInit {
   quiz: any = null; // Initialize quiz to null
+  currentQuestion: any = { qno: '', question: '', option1: '', option2: '', option3: '', option4: '', correctAnswer: '' };
   isQuizLoaded: boolean = false; // To track if quiz is fully loaded
   router = inject(Router);
+  isModalOpen: boolean = false;
 
   constructor(private route: ActivatedRoute, private quizService: AdminService) {}
 
@@ -31,17 +34,6 @@ export default class QuizPreviewComponent implements OnInit, OnDestroy {
       next: (response) => {
         if (response && response._id && response.questions) {
           this.quiz = response;
-
-          // Set up options for each question
-          this.quiz.questions.forEach((question: any) => {
-            question.options = [
-              question.option1,
-              question.option2,
-              question.option3,
-              question.option4,
-            ];
-          });
-
           this.isQuizLoaded = true;
         } else {
           console.error('No valid quiz data received.');
@@ -50,25 +42,52 @@ export default class QuizPreviewComponent implements OnInit, OnDestroy {
       error: (err) => console.error('Error fetching quiz questions:', err),
     });
   }
-
-  submitQuiz() {
-
+  openModal() {
+    this.isModalOpen = true; // Open the modal
   }
 
-  collectAnswers() {
-    const answers: string[] = []; // Initialize an array for answers
+  closeModal() {
+    this.isModalOpen = false; // Close the modal
+    this.resetForm(); // Reset the form when closing the modal
+  }
 
-    this.quiz.questions.forEach((question: any) => {
-      if (question.selectedAnswer) { // Assuming 'selectedAnswer' holds the answer chosen by the user
-        answers.push(question.selectedAnswer); // Add the selected answer to the array
-      }
+  submitQuestion() {
+    if (this.currentQuestion._id) {
+      // Edit existing question
+      this.quizService.editQuestion(this.quiz._id, this.currentQuestion._id, this.currentQuestion).subscribe({
+        next: (response) => {
+          this.loadQuiz(this.quiz._id); // Reload quiz questions
+          this.resetForm(); // Reset form
+        },
+        error: (err) => console.error('Error editing question:', err),
+      });
+    } else {
+      // Add new question
+      this.quizService.addQuestion(this.quiz._id, this.currentQuestion).subscribe({
+        next: (response) => {
+          this.loadQuiz(this.quiz._id); // Reload quiz questions
+          this.resetForm(); // Reset form
+        },
+        error: (err) => console.error('Error adding question:', err),
+      });
+    }
+  }
+
+  editQuestion(question: any) {
+    this.currentQuestion = { ...question }; // Set the current question to edit
+  }
+
+  deleteQuestion(questionId: string) {
+    this.quizService.deleteQuestion(this.quiz._id, questionId).subscribe({
+      next: (response) => {
+        this.loadQuiz(this.quiz._id); // Reload quiz questions
+      },
+      error: (err) => console.error('Error deleting question:', err),
     });
-
-    return answers; // Return the collected answers as an array of strings
   }
 
-  ngOnDestroy() {
-    // No need for timer-related cleanup
+  resetForm() {
+    this.currentQuestion = { qno: '', question: '', option1: '', option2: '', option3: '', option4: '', correctAnswer: '' }; // Reset form fields
   }
 
   quit() {

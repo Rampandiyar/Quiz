@@ -1,30 +1,69 @@
 <div *ngIf="isQuizLoaded" class="p-6 bg-gray-50 min-h-screen">
-  <!-- Quiz Header -->
-  <div class="mb-6 text-end">
-    <h3 class="text-xl font-medium text-gray-800">{{ quiz.name }}</h3>
-    <button (click)="quit()" class="px-6 py-2 bg-red-500 text-white font-semibold rounded-lg shadow hover:bg-red-600">
-      Quit
-    </button>
+  <div class="mb-6">
+    <h3 class="text-3xl font-bold text-center text-blue-600">{{ quiz.name }}</h3>
   </div>
 
-  <!-- Quiz Questions -->
-  <div class="space-y-6">
-    <div *ngFor="let question of quiz.questions" class="bg-white p-4 rounded-lg shadow-md">
-      <!-- Question Number and Text -->
-      <div class="mb-4">
-        <strong class="text-lg text-gray-700">{{ question.qno }}. {{ question.question }}</strong>
-      </div>
+  <!-- Buttons to Add/Edit Questions -->
+  <div class="flex justify-end mb-4">
+    <button (click)="openModal()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Add Question</button>
+  </div>
 
-      <!-- Options List -->
-      <ul class="space-y-2">
-        <li *ngFor="let option of question.options" class="flex items-center space-x-2">
-          <input type="radio"
-                 name="{{ question.qno }}"
-                 [value]="option"
-                 class="form-radio h-4 w-4 text-blue-500">
-          <label class="text-gray-600">{{ option }}</label>
-        </li>
+  <!-- Modal for Add/Edit Question -->
+  <div *ngIf="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg mx-auto">
+      <h4 class="text-2xl font-semibold mb-4 text-gray-800">{{ currentQuestion._id ? 'Edit' : 'Add' }} Question</h4>
+      <form (ngSubmit)="submitQuestion()" class="space-y-4">
+        <div>
+          <label class="block text-gray-700">Question Number</label>
+          <input type="text" [(ngModel)]="currentQuestion.qno" name="qno" placeholder="Question Number" class="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+        </div>
+        <div>
+          <label class="block text-gray-700">Question</label>
+          <input type="text" [(ngModel)]="currentQuestion.question" name="question" placeholder="Question" class="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+        </div>
+        <div>
+          <label class="block text-gray-700">Option 1</label>
+          <input type="text" [(ngModel)]="currentQuestion.option1" name="option1" placeholder="Option 1" class="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+        </div>
+        <div>
+          <label class="block text-gray-700">Option 2</label>
+          <input type="text" [(ngModel)]="currentQuestion.option2" name="option2" placeholder="Option 2" class="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+        </div>
+        <div>
+          <label class="block text-gray-700">Option 3</label>
+          <input type="text" [(ngModel)]="currentQuestion.option3" name="option3" placeholder="Option 3" class="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+        </div>
+        <div>
+          <label class="block text-gray-700">Option 4</label>
+          <input type="text" [(ngModel)]="currentQuestion.option4" name="option4" placeholder="Option 4" class="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+        </div>
+        <div>
+          <label class="block text-gray-700">Correct Answer</label>
+          <input type="text" [(ngModel)]="currentQuestion.correctAnswer" name="correctAnswer" placeholder="Correct Answer" class="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+        </div>
+        <div class="flex justify-end space-x-4">
+          <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Save Question</button>
+          <button type="button" (click)="closeModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Existing Questions -->
+  <div class="space-y-6 mt-8">
+    <div *ngFor="let question of quiz.questions" class="bg-white p-6 rounded-lg shadow-md">
+      <strong class="text-lg text-gray-800">{{ question.qno }}. {{ question.question }}</strong>
+      <ul class="space-y-2 mt-2">
+        <li class="text-gray-700">{{ question.option1 }}</li>
+        <li class="text-gray-700">{{ question.option2 }}</li>
+        <li class="text-gray-700">{{ question.option3 }}</li>
+        <li class="text-gray-700">{{ question.option4 }}</li>
       </ul>
+      <label class="text-gray-600 mt-2 block">Correct Answer: {{ question.correctAnswer }}</label>
+      <div class="mt-4 flex space-x-2">
+        <button (click)="editQuestion(question); openModal()" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">Edit</button>
+        <button (click)="deleteQuestion(question._id)" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+      </div>
     </div>
   </div>
 </div>

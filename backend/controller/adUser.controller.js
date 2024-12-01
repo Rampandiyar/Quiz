@@ -1,8 +1,9 @@
+
 import AddUser from "../models/User.js";
 import xlsx from 'xlsx';
 import mongoose, { Schema } from "mongoose";
 import Role from "../models/Role.js";
-
+import jwt from 'jsonwebtoken';
 
 
 // Controller for handling user upload from an Excel file
@@ -67,12 +68,23 @@ export const addUser = async (req, res, next) => {
 // Get quizzes
 export const getUsers = async (req, res, next) => {
   try {
-    const users = await AddUser.find().select('name createdAt'); // Select only needed fields
-    return res.status(200).json({ users });
+    const users = await AddUser.find().select('name details createdAt'); // Select name, details, and createdAt fields
+
+    // Map user data to include the department and year from the first detail entry
+    const userData = users.map(user => ({
+      _id: user._id,
+      name: user.name,
+      createdAt: user.createdAt,
+      department: user.details[0]?.department, // Assume the first entry
+      year: user.details[0]?.year, // Assume the first entry
+    }));
+
+    return res.status(200).json({ users: userData });
   } catch (error) {
     return res.status(500).json({ message: "Error fetching users", error });
   }
 };
+
 // Update quiz name
 export const updateUser = async (req, res, next) => {
   try {
@@ -110,18 +122,51 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-export const getUsersdetails = async (req, res, next) => {
+
+export const userLogin = async (req, res, next) => {
   try {
-    // Fetch users from the database
-    const users = await AddUser.find().select('details'); // Select only the details array
+      const { rollno, password } = req.body; // Get roll number and password from request body
+      
+      // Find the user by roll number in the details array
+      const user = await AddUser.findOne({ "details.rollno": rollno });
 
-    // Extract the details array from each user
-    const userDetails = users.map(user => user.details).flat(); // Flatten the details arrays
+      if (!user) {
+          return res.status(404).send("User not found");
+      }
 
-    // Ensure that userDetails contains all the required fields
-    return res.status(200).json({ users: userDetails });
+      // Find the specific detail object that matches the roll number
+      const userDetail = user.details.find(detail => detail.rollno === rollno);
+
+      // Check if the password matches
+      if (userDetail.password !== password) {
+          return res.status(400).send("Invalid password");
+      }
+
+      // Generate a token
+      const token = jwt.sign(
+          { id: user._id, isAdmin: user.isAdmin, roles: userDetail.roles },
+          process.env.JWT_SECRET,
+          { expiresIn: "1h" }
+      );
+
+      // Set a cookie with the token
+      res.cookie("access_token", token, { httpOnly: true })
+          .status(200)
+          .json({
+              status: 200,
+              message: "User Login successful",
+              data: {
+                  _id: userDetail._id,
+                  name: userDetail.name,
+                  regno: userDetail.regno,
+                  rollno:userDetail.rollno,
+                  department:userDetail.department,
+                  year:userDetail.year
+                  // You can include more details if needed
+              } 
+          });
   } catch (error) {
-    return res.status(500).json({ message: "Error fetching users", error });
+      console.error(error); // Log the error for debugging
+      next(error);
   }
 };
-

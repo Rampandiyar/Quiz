@@ -9,7 +9,7 @@ import {
   updateQuiz
 } from "../controller/adQuiz.controller.js";
 import multer from "multer";
-import { getAllMarks } from "../controller/quiz.controller.js";
+import { addQuestion, deleteQuestion, editQuestion, getAllMarks } from "../controller/quiz.controller.js";
 
 
 const router = express.Router();
@@ -36,5 +36,14 @@ router.post('/quizes/:quizId/set-duration', setQuizDuration);
 
 router.get('/quizes/all', getAllMarks);
 router.delete('/quizes/:id', deleteQuiz);
+
+// Route to add a question to a quiz
+router.post('/quizzes/:quizId/questions', addQuestion);
+
+// Route to edit a question in a quiz
+router.put('/quizzes/:quizId/questions/:questionId', editQuestion);
+
+// Route to delete a question from a quiz
+router.delete('/quizzes/:quizId/questions/:questionId', deleteQuestion);
 
 export default router;
