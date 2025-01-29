@@ -21,10 +21,10 @@ const AdminSchema = new Schema({
         type:Boolean,
         default:true
     },
-    roles:[{
+    roles:{
         type: Schema.Types.ObjectId,
         ref: 'Role'
-    }]
+    }
 },
 {
     timestamps: true
